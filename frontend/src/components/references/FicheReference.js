@@ -59,7 +59,7 @@ export const FicheReference = React.forwardRef(({ data }, ref) => {
       </p> */}
 
       {/* 3. CADRE RÉSERVÉ À L'HÔPITAL DE DESTINATION (À remplir au stylo) */}
-      <div style={{ border: '2px dashed black', padding: '15px', backgroundColor: '#fafafa', marginTop: '200px'}}>
+      <div style={{ border: '2px dashed black', padding: '15px', backgroundColor: '#fafafa', marginTop: '500px'}}>
         <h3 style={{ marginTop: 0, borderBottom: '1px dashed #ccc', paddingBottom: '5px', fontSize: '16px' }}>
           II. CADRE RÉSERVÉ À LA STRUCTURE D'ACCUEIL (Contre-Référence)
         </h3>
