@@ -12,7 +12,7 @@ class Reference(models.Model):
     service = models.ForeignKey('services.Service', on_delete=models.CASCADE)
     
     hospital_source = models.ForeignKey('hospitals.Hospital', related_name='references_envoyees', on_delete=models.CASCADE)
-    hopital_destinataire = models.ForeignKey('hospitals.Hospital', related_name='references_recues', on_delete=models.CASCADE)
+    hospital_destination = models.ForeignKey('hospitals.Hospital', related_name='references_recues', on_delete=models.CASCADE)
     
     doctor = models.ForeignKey(
         settings.AUTH_USER_MODEL, 

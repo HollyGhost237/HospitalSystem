@@ -37,7 +37,7 @@ class Migration(migrations.Migration):
                 ('date_rendez_vous', models.DateField(blank=True, null=True)),
                 ('date_sortie', models.DateTimeField(blank=True, null=True)),
                 ('commentaires_destinataire', models.TextField(blank=True, null=True)),
-                ('hopital_destinataire', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='entrantes', to='hospitals.hospital')),
+                ('hospital_destination', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='entrantes', to='hospitals.hospital')),
                 ('hopital_referent', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='sortantes', to='hospitals.hospital')),
                 ('patient', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='patients.patient')),
                 ('service', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='services.service')),

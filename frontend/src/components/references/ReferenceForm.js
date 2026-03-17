@@ -7,6 +7,7 @@ import {
 import api from '../../services/api';
 import HospitalProposal from './HospitalProposal';
 
+const user = JSON.parse(localStorage.getItem('user')) || { id: 1, hospital_id: 1 };
 const steps = ['Patient et service', 'Détails cliniques', 'Choix de l\'hôpital', 'Confirmation'];
 
 const ReferenceForm = () => {
@@ -55,38 +56,48 @@ const ReferenceForm = () => {
   const handleBack = () => setActiveStep((prev) => prev - 1);
 
   const handleCreateReference = async () => {
-    setLoading(true);
-    setError('');
-    try {
-      const response = await api.post('/references/', {
-        patient: parseInt(formData.patient_id, 10),
-        service: parseInt(formData.service_id, 10),
-        hospital_destination: selectedHospital.id,
-        motif_consultation: formData.motif_consultation,
-        trouvailles_cliniques: formData.trouvailles_cliniques,
-        diagnostic: formData.diagnostic,
-        examens_faits: formData.examens_paracliniques,
-        traitements_recus: formData.traitements_recus,
-        niveau_urgence: formData.niveau_urgence
-      });
+  setLoading(true);
+  setError('');
+  try {
+    // Préparation des données pour correspondre au backend
+    const payload = {
+      patient: parseInt(formData.patient_id, 10),
+      service: parseInt(formData.service_id, 10),
+      doctor: user.id, // ID de l'utilisateur connecté
+      hospital_source: 1, // ID de l'hôpital actuel
+      hospital_destination: selectedHospital.id, // Vérifiez bien le nom (avec un 'i')
+      motif_consultation: formData.motif_consultation,
+      trouvailles_cliniques: formData.trouvailles_cliniques,
+      diagnostic: formData.diagnostic,
+      examens_faits: formData.examens_paracliniques,
+      traitements_recus: formData.traitements_recus,
+      niveau_urgence: formData.niveau_urgence,
+      raisons_reference: formData.raisons_reference || "Non spécifié",
+      status: 'en_attente'
+    };
 
-      // Si ton backend utilise un moteur de recommandation spécifique
-      if (selectedHospital.ml_data_id) {
-        await api.post('/references/choisir_hopital/', {
-          ml_data_id: selectedHospital.ml_data_id,
-          reference_id: response.data.id
-        });
-      }
+    console.log("Tentative d'envoi :", payload);
+
+      const response = await api.post('/references/', payload);
+
+    if (selectedHospital.ml_data_id) {
+      await api.post('/references/choisir_hopital/', {
+        ml_data_id: selectedHospital.ml_data_id,
+        reference_id: response.data.id
+      });
+    }
 
       setReferenceCreated(response.data);
       handleNext();
     } catch (err) {
-      setError('Erreur lors de la création de la référence');
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+    // Affiche l'erreur détaillée du backend dans la console pour déboguer
+    const errorMsg = err.response?.data ? JSON.stringify(err.response.data) : 'Erreur de création';
+    setError(`Erreur : ${errorMsg}`);
+    console.error("Détails erreur 400:", err.response?.data);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const patientLabel = patients.find(p => p.id === Number(formData.patient_id));
   const serviceLabel = services.find(s => s.id === Number(formData.service_id));

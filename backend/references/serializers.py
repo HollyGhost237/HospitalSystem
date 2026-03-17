@@ -1,4 +1,5 @@
 from datetime import date
+from hospitals.models import Hospital
 from rest_framework import serializers
 from .models import Reference, ReferenceHistory
 
@@ -19,16 +20,15 @@ class ReferenceSerializer(serializers.ModelSerializer):
     patient_age = serializers.SerializerMethodField()
     patient_gender = serializers.CharField(source='patient.gender', read_only=True)
     
-    hospital_destination_name = serializers.ReadOnlyField(source='hopital_destinataire.name')
+    hospital_destination_name = serializers.ReadOnlyField(source='hospital_destination.name')
     service_name = serializers.CharField(source='service.name', read_only=True)
     history = ReferenceHistorySerializer(source='referencehistory_set', many=True, read_only=True)
 
     # --- Mapping des champs envoyés par React (Source -> Modèle) ---
-    # React envoie 'hospital_destination', le modèle utilise 'hopital_destinataire'
+    # React envoie 'hospital_destination', le modèle utilise 'hospital_destination'
     hospital_destination = serializers.PrimaryKeyRelatedField(
-        source='hopital_destinataire', 
-        queryset=Reference._meta.get_field('hopital_destinataire').remote_field.model.objects.all()
-    )
+    queryset=Hospital.objects.all()
+)
     
     # Si React envoie 'hospital_source' (ou pour l'affichage)
     hospital_source_name = serializers.CharField(source='hopital_referent.name', read_only=True)
