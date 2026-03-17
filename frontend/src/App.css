@@ -36,3 +36,15 @@
     transform: rotate(360deg);
   }
 }
+
+/* Rendu d'impression parfait pour le Master */
+@media print {
+  @page {
+    size: A4 portrait; /* Force le format A4 vertical */
+    margin: 15mm; /* Marges officielles */
+  }
+  body {
+    background-color: white !important;
+    -webkit-print-color-adjust: exact; /* Force l'impression des couleurs de fond (ex: gris clair) */
+  }
+}
