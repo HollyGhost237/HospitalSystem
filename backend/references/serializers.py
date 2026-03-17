@@ -35,16 +35,7 @@ class ReferenceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Reference
-        fields = [
-            'id', 'patient', 'patient_name', 'patient_age', 'patient_gender',
-            'hospital_source_name',
-            'hospital_destination', 'hospital_destination_name',
-            'service', 'service_name',
-            'motif_consultation', 'trouvailles_cliniques', 'diagnostic',
-            'examens_faits', 'traitements_recus', 'niveau_urgence',
-            'status', 'date_reference',
-            'history'
-        ]
+        fields = '__all__'
         read_only_fields = ['date_reference', 'id']
 
     def get_patient_name(self, obj):

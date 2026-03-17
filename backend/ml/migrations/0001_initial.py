@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('hospitals', '0001_initial'),
         ('patients', '0001_initial'),
-        ('references', '0003_referencehistory_changed_by'),
+        ('references', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
