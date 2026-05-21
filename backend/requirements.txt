@@ -1,0 +1,5 @@
+django
+# djangorestframework      #  DRF
+mysqlclient              # connecteur MySQL
+python-decouple          # pour les variables d'environnement
+whitenoise               # pour servir les fichiers statiques
