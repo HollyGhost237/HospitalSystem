@@ -13,11 +13,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 import os
 from datetime import timedelta
 from pathlib import Path
-from pathlib import Path
 from decouple import config
-
-SECRET_KEY = config('SECRET_KEY')
-DEBUG = config('DEBUG', default=False, cast=bool)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,12 +23,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-7$qfh)u$$)1s^v1#gr7g_%9u-+5=o#z*oox9%e^ule+_5ptyrl'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in config('ALLOWED_HOSTS', default='localhost,127.0.0.1,.vercel.app').split(',')
+    if host.strip()
+]
 
 
 # Application definition
@@ -93,27 +93,21 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'zemta',
-#         'USER': 'root',
-#         'PASSWORD': '',
-#         'HOST': 'localhost',
-#         'PORT': '3306',
-#     }
-# }
+print("HOST:", config('MYSQL_HOST', default='localhost'))
+print("PORT:", config('MYSQL_PORT', default='3306'))
+print("DB:", config('MYSQL_DATABASE', default='zemta'))
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': config('MYSQL_DATABASE'),
-        'USER': config('MYSQL_USER'),
-        'PASSWORD': config('MYSQL_PASSWORD'),
-        'HOST': config('MYSQL_HOST'),
+        'NAME': config('MYSQL_DATABASE', default='zemta'),
+        'USER': config('MYSQL_USER', default='root'),
+        'PASSWORD': config('MYSQL_PASSWORD', default=''),
+        'HOST': config('MYSQL_HOST', default='localhost'),
         'PORT': config('MYSQL_PORT', default='3306'),
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -154,8 +148,16 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# À modifier en production
-CORS_ALLOW_ALL_ORIGINS = [ config('FRONTEND_URL', default='http://localhost:3000'),
+CORS_ALLOWED_ORIGINS = [
+    origin.strip()
+    for origin in config('FRONTEND_URL', default='http://localhost:3000').split(',')
+    if origin.strip()
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in config('CSRF_TRUSTED_ORIGINS', default='').split(',')
+    if origin.strip()
 ]
 
 REST_FRAMEWORK = {
