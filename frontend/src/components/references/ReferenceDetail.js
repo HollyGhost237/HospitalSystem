@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Container,
   Paper,
@@ -36,11 +36,7 @@ const ReferenceDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    fetchReference();
-  }, [id]);
-
-  const fetchReference = async () => {
+  const fetchReference = useCallback(async () => {
     setLoading(true);
     try {
       const [refRes, histRes] = await Promise.all([
@@ -54,7 +50,11 @@ const ReferenceDetail = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    fetchReference();
+  }, [fetchReference]);
 
   const getActiveStep = () => {
     const index = steps.indexOf(reference?.status);

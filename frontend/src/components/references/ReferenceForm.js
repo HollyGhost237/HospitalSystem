@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import { FicheReference } from './FicheReference';
-import { useNavigate } from 'react-router-dom';
 import {
   User, Stethoscope, ClipboardList, Printer,
-  ArrowLeft, CheckCircle, AlertTriangle, Hospital,
-  ChevronRight, Activity, FileText, Pill
+  CheckCircle, AlertTriangle, Hospital,
+  Activity, FileText, Pill
 } from 'lucide-react';
 import api from '../../services/api';
 import HospitalProposal from './HospitalProposal';
@@ -271,7 +270,7 @@ const Step2 = ({ formData, setFormData }) => (
   </div>
 );
 
-const Step3 = ({ formData, selectedHospital, setSelectedHospital }) => (
+const Step3 = ({ formData, setSelectedHospital }) => (
   <div style={{ display: 'flex', flexDirection: 'column', gap: 16, animation: 'rfIn .35s ease both' }}>
     <div className="rf-alert info">
       <Hospital size={16} />
@@ -394,7 +393,7 @@ const ReferenceForm = () => {
             {error && <div className="rf-alert error" style={{ marginBottom: 20 }}>{error}</div>}
             {activeStep === 0 && <Step1 formData={formData} setFormData={setFormData} patients={patients} services={services} />}
             {activeStep === 1 && <Step2 formData={formData} setFormData={setFormData} />}
-            {activeStep === 2 && <Step3 formData={formData} selectedHospital={selectedHospital} setSelectedHospital={setSelectedHospital} />}
+            {activeStep === 2 && <Step3 formData={formData} setSelectedHospital={setSelectedHospital} />}
             {activeStep === 3 && <Step4 referenceCreated={referenceCreated} componentRef={componentRef} handlePrint={handlePrint} />}
           </div>
 

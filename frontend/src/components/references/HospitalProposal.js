@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Card,
@@ -26,13 +26,7 @@ const HospitalProposal = ({ patientId, serviceId, onSelect }) => {
   const [error, setError] = useState(null);
   const [selectedHospital, setSelectedHospital] = useState(null);
 
-  useEffect(() => {
-    if (patientId && serviceId) {
-      fetchProposals();
-    }
-  }, [patientId, serviceId]);
-
-  const fetchProposals = async () => {
+  const fetchProposals = useCallback(async () => {
     setLoading(true);
     try {
       const response = await api.post('/references/proposer_hopitaux/', {
@@ -56,7 +50,13 @@ const HospitalProposal = ({ patientId, serviceId, onSelect }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [patientId, serviceId]);
+
+  useEffect(() => {
+    if (patientId && serviceId) {
+      fetchProposals();
+    }
+  }, [patientId, serviceId, fetchProposals]);
 
   const handleSelectHospital = async (proposal) => {
     setSelectedHospital(proposal.id);
